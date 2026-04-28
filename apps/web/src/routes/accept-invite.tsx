@@ -5,7 +5,7 @@ import { acceptInviteSchema, AcceptInviteDto } from '@soulmovie/shared';
 import { api } from '@/lib/api';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/_public/accept-invite')({
+export const Route = createFileRoute('/accept-invite')({
   component: Accept,
   validateSearch: (s: Record<string, unknown>) => ({ token: String(s.token ?? '') }),
 });

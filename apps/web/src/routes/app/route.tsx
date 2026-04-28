@@ -1,16 +1,16 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useAuthStore } from '@/lib/auth-store';
 
-export const Route = createFileRoute('/_admin')({
+export const Route = createFileRoute('/app')({
   beforeLoad: () => {
     const { user } = useAuthStore.getState();
     if (!user) throw redirect({ to: '/login' });
-    if (user.role !== 'admin') throw redirect({ to: '/app' });
+    if (user.role !== 'supplier') throw redirect({ to: '/admin' });
   },
   component: () => (
     <div className="min-h-screen">
-      <header className="bg-slate-900 text-white px-6 py-3 flex justify-between">
-        <span>Soulmovie · Admin</span>
+      <header className="bg-cyan-700 text-white px-6 py-3 flex justify-between">
+        <span>Soulmovie · Area Fornitore</span>
         <LogoutButton />
       </header>
       <main className="p-6">

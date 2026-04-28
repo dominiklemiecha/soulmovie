@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_admin/')({
+export const Route = createFileRoute('/admin/')({
   component: () => (
     <div>
       <h1 className="text-xl font-semibold mb-4">Admin Dashboard</h1>

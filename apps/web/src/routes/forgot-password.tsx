@@ -5,7 +5,7 @@ import { forgotPasswordSchema, ForgotPasswordDto } from '@soulmovie/shared';
 import { api } from '@/lib/api';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/_public/forgot-password')({ component: Forgot });
+export const Route = createFileRoute('/forgot-password')({ component: Forgot });
 
 function Forgot() {
   const [done, setDone] = useState(false);

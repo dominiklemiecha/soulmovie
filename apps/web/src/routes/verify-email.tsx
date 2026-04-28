@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 
-export const Route = createFileRoute('/_public/verify-email')({
+export const Route = createFileRoute('/verify-email')({
   component: VerifyEmail,
   validateSearch: (s: Record<string, unknown>) => ({ token: String(s.token ?? '') }),
 });

@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/auth-store';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/_public/login')({ component: Login });
+export const Route = createFileRoute('/login')({ component: Login });
 
 function Login() {
   const navigate = useNavigate();

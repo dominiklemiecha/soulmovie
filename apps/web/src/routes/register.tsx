@@ -5,7 +5,7 @@ import { registerSelfSchema, RegisterSelfDto } from '@soulmovie/shared';
 import { api } from '@/lib/api';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/_public/register')({ component: Register });
+export const Route = createFileRoute('/register')({ component: Register });
 
 function Register() {
   const navigate = useNavigate();

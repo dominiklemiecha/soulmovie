@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_supplier/')({
+export const Route = createFileRoute('/app/')({
   component: () => (
     <div>
       <h1 className="text-xl font-semibold mb-4">Area Fornitore</h1>

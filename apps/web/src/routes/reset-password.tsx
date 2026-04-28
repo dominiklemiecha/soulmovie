@@ -5,7 +5,7 @@ import { resetPasswordSchema, ResetPasswordDto } from '@soulmovie/shared';
 import { api } from '@/lib/api';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/_public/reset-password')({
+export const Route = createFileRoute('/reset-password')({
   component: Reset,
   validateSearch: (s: Record<string, unknown>) => ({ token: String(s.token ?? '') }),
 });
