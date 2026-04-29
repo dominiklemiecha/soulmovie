@@ -95,7 +95,7 @@ services:
       context: ..
       dockerfile: apps/api/Dockerfile
     restart: "no"
-    command: ["sh", "-c", "node /app/node_modules/typeorm/cli.js -d /app/apps/api/dist/infra/typeorm/data-source.js migration:run"]
+    command: ["sh", "-c", "node /app/apps/api/node_modules/typeorm/cli.js -d /app/apps/api/dist/infra/typeorm/data-source.js migration:run"]
     environment:
       DB_HOST: pgbouncer
       DB_PORT: "5432"
