@@ -31,4 +31,4 @@ ENV NODE_ENV=production
 ENV API_PORT=3000
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini","--"]
-CMD ["node","apps/api/dist/main.js"]
+CMD ["node","apps/api/dist/src/main.js"]
