@@ -95,7 +95,7 @@ services:
       context: ..
       dockerfile: apps/api/Dockerfile
     restart: "no"
-    command: ["sh", "-c", "node /app/node_modules/typeorm/cli.js -d /app/apps/api/dist/infra/typeorm/data-source.js migration:run"]
+    command: ["sh", "-c", "node /app/node_modules/typeorm/cli.js -d /app/apps/api/dist/infra/typeorm/data-source.js migration:run && node /app/apps/api/dist-seeds/seeds/bootstrap-admin.js"]
     environment:
       DB_HOST: pgbouncer
       DB_PORT: "5432"
@@ -103,6 +103,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       DB_PORT_DIRECT: "5432"
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
