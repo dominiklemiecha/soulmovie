@@ -102,3 +102,4 @@ soulmovie/
 - Auth: JWT access (15min, body) + refresh (7gg, cookie httpOnly+sameSite=strict) con rotation
 - RLS: `admin_role` (BYPASSRLS) + `supplier_role` con isolamento `supplier_id` via `SET LOCAL ROLE` per transazione
 - PgBouncer transaction mode (compatibile con `SET LOCAL`)
+
