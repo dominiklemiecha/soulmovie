@@ -11,12 +11,7 @@ COPY packages/shared/package.json packages/shared/
 RUN pnpm install --frozen-lockfile=false
 COPY packages/shared packages/shared
 COPY apps/api apps/api
-RUN pnpm --filter @soulmovie/shared build && pnpm --filter @soulmovie/api build \
- && cd apps/api && npx tsc seeds/bootstrap-admin.ts \
-   --outDir dist-seeds \
-   --module CommonJS --moduleResolution Node --target ES2022 \
-   --experimentalDecorators --emitDecoratorMetadata --esModuleInterop --skipLibCheck \
-   --rootDir .
+RUN pnpm --filter @soulmovie/shared build && pnpm --filter @soulmovie/api build
 
 # Runtime stage
 FROM node:20-alpine
@@ -27,7 +22,6 @@ COPY --from=build /workspace/apps/api/package.json apps/api/
 COPY --from=build /workspace/apps/api/dist apps/api/dist
 COPY --from=build /workspace/apps/api/migrations apps/api/migrations
 COPY --from=build /workspace/apps/api/seeds apps/api/seeds
-COPY --from=build /workspace/apps/api/dist-seeds apps/api/dist-seeds
 COPY --from=build /workspace/packages/shared/package.json packages/shared/
 COPY --from=build /workspace/packages/shared/dist packages/shared/dist
 RUN pnpm install --prod --frozen-lockfile=false --filter @soulmovie/api... \

@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { TokensService } from './tokens.service';
 import { PasswordService } from './password.service';
 import { JwtStrategy } from './jwt.strategy';
+import { BootstrapAdminService } from './bootstrap-admin.service';
 import { MailModule } from '../../infra/mail/mail.module';
 
 @Module({
@@ -29,7 +30,7 @@ import { MailModule } from '../../infra/mail/mail.module';
     MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, TokensService, PasswordService, JwtStrategy],
+  providers: [AuthService, TokensService, PasswordService, JwtStrategy, BootstrapAdminService],
   exports: [AuthService, TokensService, PasswordService],
 })
 export class AuthModule {}
