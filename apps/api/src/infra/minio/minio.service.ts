@@ -62,6 +62,16 @@ export class MinioService implements OnModuleInit {
     return this.internal.statObject(this.bucket, key);
   }
 
+  async putObject(key: string, body: Buffer, mime: string): Promise<void> {
+    await this.internal.putObject(this.bucket, key, body, body.length, {
+      'Content-Type': mime,
+    });
+  }
+
+  async getObjectStream(key: string) {
+    return this.internal.getObject(this.bucket, key);
+  }
+
   async removeObject(key: string): Promise<void> {
     try {
       await this.internal.removeObject(this.bucket, key);

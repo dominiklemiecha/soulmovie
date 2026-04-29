@@ -253,8 +253,12 @@ function CertificatiTab({ id }: { id: string }) {
       </p>
     );
   const open = async (cid: string) => {
-    const r = await api.get(`/admin/suppliers/${id}/certificates/${cid}/download-url`);
-    if (r.data?.url) window.open(r.data.url, '_blank', 'noopener,noreferrer');
+    const r = await api.get(`/admin/suppliers/${id}/certificates/${cid}/download`, {
+      responseType: 'blob',
+    });
+    const url = URL.createObjectURL(r.data);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    setTimeout(() => URL.revokeObjectURL(url), 30_000);
   };
   return (
     <div className="bg-white rounded-lg border shadow-sm overflow-x-auto">

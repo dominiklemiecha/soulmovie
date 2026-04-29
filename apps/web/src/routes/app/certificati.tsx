@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CertificateStatus } from '@soulmovie/shared';
-import axios from 'axios';
 import { api } from '@/lib/api';
 import {
   DangerButton,
@@ -72,8 +71,10 @@ function CertificatiPage() {
   });
 
   const openDownload = async (id: string) => {
-    const r = await api.get(`/suppliers/me/certificates/${id}/download-url`);
-    window.open(r.data.url, '_blank', 'noopener,noreferrer');
+    const r = await api.get(`/suppliers/me/certificates/${id}/download`, { responseType: 'blob' });
+    const url = URL.createObjectURL(r.data);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    setTimeout(() => URL.revokeObjectURL(url), 30_000);
   };
 
   return (
@@ -292,29 +293,17 @@ function UploadModal({
     }
     try {
       setStage('uploading');
-      const presign = await api.post('/suppliers/me/certificates/upload-url', {
-        filename: file.name,
-        mime: file.type || 'application/octet-stream',
-        size: file.size,
-      });
-      await axios.put(presign.data.url, file, {
-        headers: { 'Content-Type': file.type || 'application/octet-stream' },
-      });
-      setStage('saving');
-      await api.post('/suppliers/me/certificates', {
-        typeId,
-        nomeAlternativo: nomeAlternativo || null,
-        numero: numero || null,
-        dataEmissione: dataEmissione || null,
-        dataScadenza: dataScadenza || null,
-        emittente: emittente || null,
-        descrizione: descrizione || null,
-        notifyEmails: notifyEmailsRaw,
-        documentObjectKey: presign.data.objectKey,
-        documentFilename: file.name,
-        documentMime: file.type || 'application/octet-stream',
-        documentSize: file.size,
-      });
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('typeId', typeId);
+      if (nomeAlternativo) fd.append('nomeAlternativo', nomeAlternativo);
+      if (numero) fd.append('numero', numero);
+      if (dataEmissione) fd.append('dataEmissione', dataEmissione);
+      if (dataScadenza) fd.append('dataScadenza', dataScadenza);
+      if (emittente) fd.append('emittente', emittente);
+      if (descrizione) fd.append('descrizione', descrizione);
+      if (notifyEmailsRaw) fd.append('notifyEmails', notifyEmailsRaw);
+      await api.post('/suppliers/me/certificates/upload', fd);
       onSaved();
     } catch (e: any) {
       setServerError(e.response?.data?.error?.message ?? e.message ?? 'Errore upload');

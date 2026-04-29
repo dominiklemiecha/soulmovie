@@ -49,12 +49,7 @@ services:
       MINIO_BROWSER_REDIRECT_URL: https://${S3_DOMAIN}
     volumes:
       - minio_data:/data
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.soulmovie-s3.rule=Host(`${S3_DOMAIN}`)
-      - traefik.http.routers.soulmovie-s3.entrypoints=websecure
-      - traefik.http.routers.soulmovie-s3.tls.certresolver=letsencrypt
-      - traefik.http.services.soulmovie-s3.loadbalancer.server.port=9000
+    # MinIO è solo interno al network: i file passano attraverso l'API.
 
   api:
     image: ${IMAGE_API}
@@ -73,7 +68,7 @@ services:
       MINIO_ENDPOINT: minio
       MINIO_PORT: "9000"
       MINIO_USE_SSL: "false"
-      MINIO_PUBLIC_ENDPOINT: https://${S3_DOMAIN}
+      MINIO_PUBLIC_ENDPOINT: http://minio:9000
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       MINIO_BUCKET: ${MINIO_BUCKET}

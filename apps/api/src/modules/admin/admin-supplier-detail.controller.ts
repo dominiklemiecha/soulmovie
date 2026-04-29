@@ -4,8 +4,10 @@ import {
   Param,
   ParseUUIDPipe,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { DataSource, In } from 'typeorm';
 import { CertificateStatus, Role } from '@soulmovie/shared';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -64,17 +66,23 @@ export class AdminSupplierDetailController {
     return items.map((c) => attachComputedStatus(c));
   }
 
-  @Get(':id/certificates/:cid/download-url')
+  @Get(':id/certificates/:cid/download')
   async certDownload(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('cid', ParseUUIDPipe) cid: string,
+    @Res() res: Response,
   ) {
     const c = await this.ds
       .getRepository(Certificate)
       .findOne({ where: { id: cid, supplierId: id } });
-    if (!c) return { url: null };
-    const url = await this.minio.presignedGet(c.documentObjectKey);
-    return { url };
+    if (!c) {
+      res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Certificato non trovato' } });
+      return;
+    }
+    const stream = await this.minio.getObjectStream(c.documentObjectKey);
+    res.setHeader('Content-Type', c.documentMime);
+    res.setHeader('Content-Disposition', `inline; filename="${c.documentFilename}"`);
+    stream.pipe(res);
   }
 
 }
