@@ -12,9 +12,11 @@ RUN pnpm install --frozen-lockfile=false
 COPY packages/shared packages/shared
 COPY apps/api apps/api
 RUN pnpm --filter @soulmovie/shared build && pnpm --filter @soulmovie/api build \
- && cd apps/api && npx tsc -p tsconfig.json --outDir dist-seeds seeds/bootstrap-admin.ts \
+ && cd apps/api && npx tsc seeds/bootstrap-admin.ts \
+   --outDir dist-seeds \
    --module CommonJS --moduleResolution Node --target ES2022 \
-   --experimentalDecorators --emitDecoratorMetadata --esModuleInterop --skipLibCheck
+   --experimentalDecorators --emitDecoratorMetadata --esModuleInterop --skipLibCheck \
+   --rootDir .
 
 # Runtime stage
 FROM node:20-alpine
