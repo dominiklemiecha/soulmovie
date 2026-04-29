@@ -10,5 +10,5 @@
     "paths": { "@/*": ["*"] },
     "target": "ES2022"
   },
-  "include": ["src/**/*", "seeds/**/*", "test/**/*"]
+  "include": ["src/**/*", "seeds/**/*", "migrations/**/*", "test/**/*"]
 }
