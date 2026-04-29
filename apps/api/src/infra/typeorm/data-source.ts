@@ -6,10 +6,19 @@ import { DataSource } from 'typeorm';
 dotenv.config({ path: path.resolve(__dirname, '../../../../../.env') });
 
 const isProd = __filename.endsWith('.js');
-// In dev (.ts via ts-node): cwd è apps/api; in prod (compilato): __dirname è apps/api/dist/src/infra/typeorm
 const apiRoot = isProd
-  ? path.resolve(__dirname, '../../../../..') // → /app/apps/api
-  : path.resolve(__dirname, '../../..');       // → apps/api
+  ? path.resolve(__dirname, '../../../../..')
+  : path.resolve(__dirname, '../../..');
+
+const migrationsGlob = isProd
+  ? path.join(apiRoot, 'dist', 'migrations', '*.js')
+  : 'migrations/*.ts';
+const entitiesGlob = isProd
+  ? path.join(apiRoot, 'dist', 'src', 'modules', '**', 'entities', '*.entity.js')
+  : 'src/modules/**/entities/*.entity.ts';
+
+// eslint-disable-next-line no-console
+console.log('[data-source]', { isProd, apiRoot, migrationsGlob, entitiesGlob });
 
 export default new DataSource({
   type: 'postgres',
@@ -18,12 +27,8 @@ export default new DataSource({
   username: process.env.POSTGRES_USER ?? 'soulmovie_app',
   password: process.env.POSTGRES_PASSWORD ?? 'devpassword',
   database: process.env.POSTGRES_DB ?? 'soulmovie',
-  entities: isProd
-    ? [path.join(apiRoot, 'dist/src/modules/**/entities/*.entity.js')]
-    : ['src/modules/**/entities/*.entity.ts'],
-  migrations: isProd
-    ? [path.join(apiRoot, 'dist/migrations/*.js')]
-    : ['migrations/*.ts'],
+  entities: [entitiesGlob],
+  migrations: [migrationsGlob],
   synchronize: false,
   logging: ['error', 'warn'],
 });
