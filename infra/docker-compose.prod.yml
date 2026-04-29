@@ -52,7 +52,9 @@ services:
     # MinIO è solo interno al network: i file passano attraverso l'API.
 
   api:
-    image: ${IMAGE_API}
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -89,7 +91,9 @@ services:
         condition: service_started
 
   api-migrate:
-    image: ${IMAGE_API}
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
     restart: "no"
     command: ["sh", "-c", "node /app/node_modules/typeorm/cli.js -d /app/apps/api/dist/infra/typeorm/data-source.js migration:run"]
     environment:
@@ -106,7 +110,9 @@ services:
         condition: service_started
 
   web:
-    image: ${IMAGE_WEB}
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
     restart: unless-stopped
     depends_on:
       api:
