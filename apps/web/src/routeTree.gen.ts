@@ -20,6 +20,18 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AppProfiloRouteImport } from './routes/app/profilo'
+import { Route as AppImpostazioniRouteImport } from './routes/app/impostazioni'
+import { Route as AppContattiRouteImport } from './routes/app/contatti'
+import { Route as AppCertificatiRouteImport } from './routes/app/certificati'
+import { Route as AppCategorieRouteImport } from './routes/app/categorie'
+import { Route as AdminTipologieCertificatiRouteImport } from './routes/admin/tipologie-certificati'
+import { Route as AdminSmtpRouteImport } from './routes/admin/smtp'
+import { Route as AdminScadenzeRouteImport } from './routes/admin/scadenze'
+import { Route as AdminFornitoriPendingRouteImport } from './routes/admin/fornitori-pending'
+import { Route as AdminCategorieRouteImport } from './routes/admin/categorie'
+import { Route as AdminAuditRouteImport } from './routes/admin/audit'
+import { Route as AdminFornitoriIdRouteImport } from './routes/admin/fornitori.$id'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -76,6 +88,67 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AppProfiloRoute = AppProfiloRouteImport.update({
+  id: '/profilo',
+  path: '/profilo',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppImpostazioniRoute = AppImpostazioniRouteImport.update({
+  id: '/impostazioni',
+  path: '/impostazioni',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppContattiRoute = AppContattiRouteImport.update({
+  id: '/contatti',
+  path: '/contatti',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppCertificatiRoute = AppCertificatiRouteImport.update({
+  id: '/certificati',
+  path: '/certificati',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppCategorieRoute = AppCategorieRouteImport.update({
+  id: '/categorie',
+  path: '/categorie',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AdminTipologieCertificatiRoute =
+  AdminTipologieCertificatiRouteImport.update({
+    id: '/tipologie-certificati',
+    path: '/tipologie-certificati',
+    getParentRoute: () => AdminRouteRoute,
+  } as any)
+const AdminSmtpRoute = AdminSmtpRouteImport.update({
+  id: '/smtp',
+  path: '/smtp',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminScadenzeRoute = AdminScadenzeRouteImport.update({
+  id: '/scadenze',
+  path: '/scadenze',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminFornitoriPendingRoute = AdminFornitoriPendingRouteImport.update({
+  id: '/fornitori-pending',
+  path: '/fornitori-pending',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminCategorieRoute = AdminCategorieRouteImport.update({
+  id: '/categorie',
+  path: '/categorie',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminFornitoriIdRoute = AdminFornitoriIdRouteImport.update({
+  id: '/fornitori/$id',
+  path: '/fornitori/$id',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,8 +160,20 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/categorie': typeof AdminCategorieRoute
+  '/admin/fornitori-pending': typeof AdminFornitoriPendingRoute
+  '/admin/scadenze': typeof AdminScadenzeRoute
+  '/admin/smtp': typeof AdminSmtpRoute
+  '/admin/tipologie-certificati': typeof AdminTipologieCertificatiRoute
+  '/app/categorie': typeof AppCategorieRoute
+  '/app/certificati': typeof AppCertificatiRoute
+  '/app/contatti': typeof AppContattiRoute
+  '/app/impostazioni': typeof AppImpostazioniRoute
+  '/app/profilo': typeof AppProfiloRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/admin/fornitori/$id': typeof AdminFornitoriIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -98,8 +183,20 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/categorie': typeof AdminCategorieRoute
+  '/admin/fornitori-pending': typeof AdminFornitoriPendingRoute
+  '/admin/scadenze': typeof AdminScadenzeRoute
+  '/admin/smtp': typeof AdminSmtpRoute
+  '/admin/tipologie-certificati': typeof AdminTipologieCertificatiRoute
+  '/app/categorie': typeof AppCategorieRoute
+  '/app/certificati': typeof AppCertificatiRoute
+  '/app/contatti': typeof AppContattiRoute
+  '/app/impostazioni': typeof AppImpostazioniRoute
+  '/app/profilo': typeof AppProfiloRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
+  '/admin/fornitori/$id': typeof AdminFornitoriIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -112,8 +209,20 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/categorie': typeof AdminCategorieRoute
+  '/admin/fornitori-pending': typeof AdminFornitoriPendingRoute
+  '/admin/scadenze': typeof AdminScadenzeRoute
+  '/admin/smtp': typeof AdminSmtpRoute
+  '/admin/tipologie-certificati': typeof AdminTipologieCertificatiRoute
+  '/app/categorie': typeof AppCategorieRoute
+  '/app/certificati': typeof AppCertificatiRoute
+  '/app/contatti': typeof AppContattiRoute
+  '/app/impostazioni': typeof AppImpostazioniRoute
+  '/app/profilo': typeof AppProfiloRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/admin/fornitori/$id': typeof AdminFornitoriIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -127,8 +236,20 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
+    | '/admin/audit'
+    | '/admin/categorie'
+    | '/admin/fornitori-pending'
+    | '/admin/scadenze'
+    | '/admin/smtp'
+    | '/admin/tipologie-certificati'
+    | '/app/categorie'
+    | '/app/certificati'
+    | '/app/contatti'
+    | '/app/impostazioni'
+    | '/app/profilo'
     | '/admin/'
     | '/app/'
+    | '/admin/fornitori/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -138,8 +259,20 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
+    | '/admin/audit'
+    | '/admin/categorie'
+    | '/admin/fornitori-pending'
+    | '/admin/scadenze'
+    | '/admin/smtp'
+    | '/admin/tipologie-certificati'
+    | '/app/categorie'
+    | '/app/certificati'
+    | '/app/contatti'
+    | '/app/impostazioni'
+    | '/app/profilo'
     | '/admin'
     | '/app'
+    | '/admin/fornitori/$id'
   id:
     | '__root__'
     | '/'
@@ -151,8 +284,20 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
+    | '/admin/audit'
+    | '/admin/categorie'
+    | '/admin/fornitori-pending'
+    | '/admin/scadenze'
+    | '/admin/smtp'
+    | '/admin/tipologie-certificati'
+    | '/app/categorie'
+    | '/app/certificati'
+    | '/app/contatti'
+    | '/app/impostazioni'
+    | '/app/profilo'
     | '/admin/'
     | '/app/'
+    | '/admin/fornitori/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -246,15 +391,113 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/app/profilo': {
+      id: '/app/profilo'
+      path: '/profilo'
+      fullPath: '/app/profilo'
+      preLoaderRoute: typeof AppProfiloRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/impostazioni': {
+      id: '/app/impostazioni'
+      path: '/impostazioni'
+      fullPath: '/app/impostazioni'
+      preLoaderRoute: typeof AppImpostazioniRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/contatti': {
+      id: '/app/contatti'
+      path: '/contatti'
+      fullPath: '/app/contatti'
+      preLoaderRoute: typeof AppContattiRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/certificati': {
+      id: '/app/certificati'
+      path: '/certificati'
+      fullPath: '/app/certificati'
+      preLoaderRoute: typeof AppCertificatiRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/categorie': {
+      id: '/app/categorie'
+      path: '/categorie'
+      fullPath: '/app/categorie'
+      preLoaderRoute: typeof AppCategorieRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/admin/tipologie-certificati': {
+      id: '/admin/tipologie-certificati'
+      path: '/tipologie-certificati'
+      fullPath: '/admin/tipologie-certificati'
+      preLoaderRoute: typeof AdminTipologieCertificatiRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/smtp': {
+      id: '/admin/smtp'
+      path: '/smtp'
+      fullPath: '/admin/smtp'
+      preLoaderRoute: typeof AdminSmtpRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/scadenze': {
+      id: '/admin/scadenze'
+      path: '/scadenze'
+      fullPath: '/admin/scadenze'
+      preLoaderRoute: typeof AdminScadenzeRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/fornitori-pending': {
+      id: '/admin/fornitori-pending'
+      path: '/fornitori-pending'
+      fullPath: '/admin/fornitori-pending'
+      preLoaderRoute: typeof AdminFornitoriPendingRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/categorie': {
+      id: '/admin/categorie'
+      path: '/categorie'
+      fullPath: '/admin/categorie'
+      preLoaderRoute: typeof AdminCategorieRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/fornitori/$id': {
+      id: '/admin/fornitori/$id'
+      path: '/fornitori/$id'
+      fullPath: '/admin/fornitori/$id'
+      preLoaderRoute: typeof AdminFornitoriIdRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
 
 interface AdminRouteRouteChildren {
+  AdminAuditRoute: typeof AdminAuditRoute
+  AdminCategorieRoute: typeof AdminCategorieRoute
+  AdminFornitoriPendingRoute: typeof AdminFornitoriPendingRoute
+  AdminScadenzeRoute: typeof AdminScadenzeRoute
+  AdminSmtpRoute: typeof AdminSmtpRoute
+  AdminTipologieCertificatiRoute: typeof AdminTipologieCertificatiRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminFornitoriIdRoute: typeof AdminFornitoriIdRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAuditRoute: AdminAuditRoute,
+  AdminCategorieRoute: AdminCategorieRoute,
+  AdminFornitoriPendingRoute: AdminFornitoriPendingRoute,
+  AdminScadenzeRoute: AdminScadenzeRoute,
+  AdminSmtpRoute: AdminSmtpRoute,
+  AdminTipologieCertificatiRoute: AdminTipologieCertificatiRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminFornitoriIdRoute: AdminFornitoriIdRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
@@ -262,10 +505,20 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 interface AppRouteRouteChildren {
+  AppCategorieRoute: typeof AppCategorieRoute
+  AppCertificatiRoute: typeof AppCertificatiRoute
+  AppContattiRoute: typeof AppContattiRoute
+  AppImpostazioniRoute: typeof AppImpostazioniRoute
+  AppProfiloRoute: typeof AppProfiloRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppCategorieRoute: AppCategorieRoute,
+  AppCertificatiRoute: AppCertificatiRoute,
+  AppContattiRoute: AppContattiRoute,
+  AppImpostazioniRoute: AppImpostazioniRoute,
+  AppProfiloRoute: AppProfiloRoute,
   AppIndexRoute: AppIndexRoute,
 }
 

@@ -11,6 +11,13 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { MailModule } from './infra/mail/mail.module';
 import { HealthModule } from './modules/health/health.module';
+import { SuppliersModule } from './modules/suppliers/suppliers.module';
+import { UsersModule } from './modules/users/users.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { ContactsModule } from './modules/contacts/contacts.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { CertificatesModule } from './modules/certificates/certificates.module';
+import { MinioModule } from './infra/minio/minio.module';
 
 initializeTransactionalContext();
 
@@ -22,6 +29,13 @@ initializeTransactionalContext();
     MailModule,
     AuthModule,
     HealthModule,
+    SuppliersModule,
+    UsersModule,
+    AdminModule,
+    ContactsModule,
+    CategoriesModule,
+    MinioModule,
+    CertificatesModule,
   ],
   providers: [
     TransactionalDb,

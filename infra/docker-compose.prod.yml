@@ -1,0 +1,129 @@
+name: soulmovie-prod
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    restart: unless-stopped
+    environment:
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_HOST: postgres
+      DB_NAME: ${POSTGRES_DB}
+      POOL_MODE: transaction
+      ADMIN_USERS: ${POSTGRES_USER}
+      AUTH_TYPE: scram-sha-256
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BROWSER_REDIRECT_URL: https://${S3_DOMAIN}
+    volumes:
+      - minio_data:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.soulmovie-s3.rule=Host(`${S3_DOMAIN}`)
+      - traefik.http.routers.soulmovie-s3.entrypoints=websecure
+      - traefik.http.routers.soulmovie-s3.tls.certresolver=letsencrypt
+      - traefik.http.services.soulmovie-s3.loadbalancer.server.port=9000
+
+  api:
+    image: ${IMAGE_API}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DB_HOST: pgbouncer
+      DB_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      MAIL_DEV_HOST: ""
+      MAIL_DEV_PORT: "0"
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: "9000"
+      MINIO_USE_SSL: "false"
+      MINIO_PUBLIC_ENDPOINT: https://${S3_DOMAIN}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_TTL: 15m
+      JWT_REFRESH_TTL: 7d
+      SETTINGS_ENCRYPTION_KEY: ${SETTINGS_ENCRYPTION_KEY}
+      API_PORT: "3000"
+      WEB_BASE_URL: https://${WEB_DOMAIN}
+      API_BASE_URL: https://${WEB_DOMAIN}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_started
+
+  api-migrate:
+    image: ${IMAGE_API}
+    restart: "no"
+    command: ["sh", "-c", "node /app/node_modules/typeorm/cli.js -d /app/apps/api/dist/infra/typeorm/data-source.js migration:run"]
+    environment:
+      DB_HOST: pgbouncer
+      DB_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DB_PORT_DIRECT: "5432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_started
+
+  web:
+    image: ${IMAGE_WEB}
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.soulmovie-web.rule=Host(`${WEB_DOMAIN}`)
+      - traefik.http.routers.soulmovie-web.entrypoints=websecure
+      - traefik.http.routers.soulmovie-web.tls.certresolver=letsencrypt
+      - traefik.http.services.soulmovie-web.loadbalancer.server.port=80
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

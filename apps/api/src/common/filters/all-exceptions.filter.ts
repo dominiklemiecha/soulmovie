@@ -19,6 +19,26 @@ export class AllExceptionsFilter implements ExceptionFilter {
         error: { code, message, details: r?.error?.details, traceId },
       });
     }
+    const msg = String((exception as any)?.message ?? '');
+    const driver = (exception as any)?.driverError;
+    if (driver?.code === '23505' || msg.includes('duplicate key value')) {
+      const detail = String(driver?.detail ?? msg);
+      let code: string = ErrorCodes.VALIDATION_ERROR;
+      let userMsg = 'Valore già usato da un altro record';
+      if (msg.includes('codice_fiscale') || detail.includes('codice_fiscale')) {
+        code = ErrorCodes.CF_ALREADY_REGISTERED;
+        userMsg = 'Codice fiscale già usato da un altro fornitore';
+      } else if (msg.includes('partita_iva') || detail.includes('partita_iva')) {
+        code = ErrorCodes.PIVA_ALREADY_REGISTERED;
+        userMsg = 'Partita IVA già usata da un altro fornitore';
+      } else if (msg.includes('users_email') || detail.includes('email')) {
+        code = ErrorCodes.EMAIL_ALREADY_REGISTERED;
+        userMsg = 'Email già registrata';
+      }
+      return res.status(HttpStatus.CONFLICT).json({
+        error: { code, message: userMsg, traceId },
+      });
+    }
     this.log.error('Unhandled', exception as any);
     return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       error: { code: ErrorCodes.INTERNAL_ERROR, message: 'Errore interno', traceId },

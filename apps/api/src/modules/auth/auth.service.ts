@@ -101,19 +101,20 @@ export class AuthService {
         error: { code, message: 'Account non attivo' },
       });
     }
+    let supplierApprovalStatus: ApprovalStatus | null = null;
     if (user.role === Role.SUPPLIER && user.supplierId) {
       const sup = await supplierRepo.findOne({ where: { id: user.supplierId } });
-      if (sup?.approvalStatus !== ApprovalStatus.APPROVED) {
+      supplierApprovalStatus = sup?.approvalStatus ?? null;
+      if (sup?.approvalStatus === ApprovalStatus.REJECTED) {
         throw new UnauthorizedException({
-          error: {
-            code: ErrorCodes.AUTH_SUPPLIER_NOT_APPROVED,
-            message: 'Account in attesa di approvazione',
-          },
+          error: { code: ErrorCodes.AUTH_SUPPLIER_NOT_APPROVED, message: 'Account disattivato' },
         });
       }
+      // PENDING o APPROVED → consenti login. Frontend mostra solo profilo se non approvato.
     }
     await userRepo.update(user.id, { lastLoginAt: new Date() });
-    return this.issueTokens(user, ip, ua);
+    const out = await this.issueTokens(user, ip, ua);
+    return { ...out, user: { ...out.user, supplierApprovalStatus } };
   }
 
   private async issueTokens(user: User, ip?: string, ua?: string) {
@@ -145,7 +146,13 @@ export class AuthService {
     const ttl = this.parseTtl(this.cfg.get('jwt.refreshTtl')!);
     const rotated = await this.tokens.rotateRefresh(rawRefresh, ttl, ip, ua);
     const userRepo = this.ds.getRepository(User);
+    const supplierRepo = this.ds.getRepository(Supplier);
     const user = await userRepo.findOneOrFail({ where: { id: rotated.userId } });
+    let supplierApprovalStatus: ApprovalStatus | null = null;
+    if (user.role === Role.SUPPLIER && user.supplierId) {
+      const sup = await supplierRepo.findOne({ where: { id: user.supplierId } });
+      supplierApprovalStatus = sup?.approvalStatus ?? null;
+    }
     const accessToken = await this.jwt.signAsync({
       sub: user.id,
       role: user.role,
@@ -159,6 +166,7 @@ export class AuthService {
         email: user.email,
         role: user.role,
         supplierId: user.supplierId,
+        supplierApprovalStatus,
       },
     };
   }

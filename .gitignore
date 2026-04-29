@@ -11,3 +11,7 @@ coverage
 .pnpm-store
 .claude/
 *.tsbuildinfo
+dumps/
+test-cert-phase5.sh
+docs/superpowers/
+docs/

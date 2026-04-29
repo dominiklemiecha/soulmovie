@@ -2,9 +2,6 @@
 
 Gestionale fornitori (B2B) — supplier management con area admin e area fornitore.
 
-Spec di design: `docs/superpowers/specs/2026-04-28-soulmovie-dashboard-design.md`
-Piano di implementazione Fase 1: `docs/superpowers/plans/2026-04-28-soulmovie-phase1-foundations.md`
-
 ## Stack
 
 - **Frontend**: React 18 + TypeScript + Vite + TanStack Router/Query + Tailwind
@@ -89,7 +86,7 @@ soulmovie/
 
 ## Roadmap fasi
 
-- **Fase 1** (questo tag `phase-1-foundations`): Fondamenta — auth completa, RLS, stack Docker, shell FE
+- Fase 1: Fondamenta — auth completa, RLS, stack Docker, shell FE
 - Fase 2: Tab "Società e contatti" + "Impostazioni personali" + admin approva fornitore
 - Fase 3: Contatti del fornitore (CRUD)
 - Fase 4: Categorie merceologiche (albero + picker)

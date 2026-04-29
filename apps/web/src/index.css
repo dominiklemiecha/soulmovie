@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Scaliamo tutto il sistema di spacing/typography (rem) all'80%.
+   Tailwind usa rem ovunque, quindi padding, gap, font, ecc. scalano proporzionalmente.
+   Il viewport (vh/vw) resta corretto, niente troncamento. */
+html {
+  font-size: 12.8px;
+}

@@ -25,6 +25,15 @@ export default () => ({
     devHost: process.env.MAIL_DEV_HOST ?? 'localhost',
     devPort: parseInt(process.env.MAIL_DEV_PORT ?? '1025', 10),
   },
+  minio: {
+    endpoint: process.env.MINIO_ENDPOINT ?? 'localhost',
+    port: parseInt(process.env.MINIO_PORT ?? '9000', 10),
+    useSSL: process.env.MINIO_USE_SSL === 'true',
+    accessKey: process.env.MINIO_ROOT_USER ?? 'minioadmin',
+    secretKey: process.env.MINIO_ROOT_PASSWORD ?? 'minioadmin',
+    bucket: process.env.MINIO_BUCKET ?? 'soulmovie',
+    publicEndpoint: process.env.MINIO_PUBLIC_ENDPOINT ?? 'http://localhost:9000',
+  },
   bootstrap: {
     adminEmail: process.env.BOOTSTRAP_ADMIN_EMAIL ?? 'admin@soulmovie.local',
     adminPassword: process.env.BOOTSTRAP_ADMIN_PASSWORD ?? 'AdminPass123!',

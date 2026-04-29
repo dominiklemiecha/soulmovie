@@ -6,6 +6,7 @@ interface AuthUser {
   email: string;
   role: 'admin' | 'supplier';
   supplierId?: string;
+  supplierApprovalStatus?: 'pending' | 'approved' | 'rejected' | null;
 }
 
 interface AuthState {
