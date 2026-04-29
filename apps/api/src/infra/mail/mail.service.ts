@@ -39,10 +39,23 @@ export class MailService {
   }
 
   async send(args: SendArgs): Promise<void> {
-    const tx = await this.getTransporter();
     const smtp = await this.settings.getSmtp().catch(() => null);
-    const from = smtp?.from ?? 'noreply@soulmovie.local';
-    await tx.sendMail({ from, ...args });
-    this.log.log(`mail sent to=${args.to} subject="${args.subject}"`);
+    const devHost = this.cfg.get<string>('mail.devHost');
+    if (!smtp && !devHost) {
+      this.log.warn(
+        `mail NON inviata (SMTP non configurato) to=${args.to} subject="${args.subject}"`,
+      );
+      return;
+    }
+    try {
+      const tx = await this.getTransporter();
+      const from = smtp?.from ?? 'noreply@soulmovie.local';
+      await tx.sendMail({ from, ...args });
+      this.log.log(`mail sent to=${args.to} subject="${args.subject}"`);
+    } catch (err) {
+      this.log.error(
+        `invio mail fallito to=${args.to} subject="${args.subject}": ${(err as Error).message}`,
+      );
+    }
   }
 }

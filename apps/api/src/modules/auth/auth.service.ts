@@ -2,6 +2,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -25,6 +26,7 @@ import { MailService } from '../../infra/mail/mail.service';
 
 @Injectable()
 export class AuthService {
+  private readonly log = new Logger(AuthService.name);
   constructor(
     private readonly ds: DataSource,
     private readonly password: PasswordService,
@@ -65,6 +67,7 @@ export class AuthService {
 
     const raw = await this.tokens.issueOneTime(user.id, 'email_verification', 24 * 60 * 60 * 1000);
     const link = `${this.cfg.get('webBaseUrl')}/verify-email?token=${raw}`;
+    this.log.log(`[register] verify link per ${dto.email}: ${link}`);
     await this.mail.send({
       to: dto.email,
       subject: 'Verifica il tuo indirizzo email — Soulmovie',
@@ -208,6 +211,7 @@ export class AuthService {
 
     const raw = await this.tokens.issueOneTime(user.id, 'invite', 7 * 24 * 60 * 60 * 1000);
     const link = `${this.cfg.get('webBaseUrl')}/accept-invite?token=${raw}`;
+    this.log.log(`[invite] accept link per ${dto.email}: ${link}`);
     await this.mail.send({
       to: dto.email,
       subject: 'Sei stato invitato su Soulmovie',
@@ -230,6 +234,7 @@ export class AuthService {
     if (!user) return;
     const raw = await this.tokens.issueOneTime(user.id, 'password_reset', 60 * 60 * 1000);
     const link = `${this.cfg.get('webBaseUrl')}/reset-password?token=${raw}`;
+    this.log.log(`[forgot] reset link per ${email}: ${link}`);
     await this.mail.send({
       to: email,
       subject: 'Reset password Soulmovie',
