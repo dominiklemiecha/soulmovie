@@ -6,8 +6,9 @@ import { DataSource } from 'typeorm';
 dotenv.config({ path: path.resolve(__dirname, '../../../../../.env') });
 
 const isProd = __filename.endsWith('.js');
+// In prod __dirname = /app/apps/api/dist/src/infra/typeorm → 4 livelli su = /app/apps/api
 const apiRoot = isProd
-  ? path.resolve(__dirname, '../../../../..')
+  ? path.resolve(__dirname, '../../../..')
   : path.resolve(__dirname, '../../..');
 
 const migrationsGlob = isProd
