@@ -87,9 +87,9 @@ function SmtpPage() {
       )}
       {!data && (
         <div className="rounded border border-amber-300 bg-amber-50 text-amber-900 text-sm p-3">
-          Nessun SMTP configurato. Le email vengono attualmente inviate al server di sviluppo
-          (MailHog) — visibili su <a className="underline" href="http://localhost:8025" target="_blank" rel="noopener">localhost:8025</a>.
-          In produzione configura un SMTP reale qui sotto.
+          Nessun SMTP configurato. Finché non lo imposti, le email di verifica, invito e reset
+          password non vengono inviate: trovi i link nei log del server. Configura qui sotto un
+          SMTP reale (es. Gmail, SendGrid, Mailgun, Brevo) per attivare l'invio automatico.
         </div>
       )}
 
